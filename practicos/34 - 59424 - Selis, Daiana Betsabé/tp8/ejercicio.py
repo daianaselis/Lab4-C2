@@ -34,7 +34,7 @@ if archivo is not None:
             Unidades_vendidas=('Unidades_vendidas', 'sum')
         ).reset_index()
 
-        last_month = df[['Año', 'Mes']].max()  # Find the latest year and month
+        last_month = df[['Año', 'Mes']].max()  
         last_year, last_month = last_month['Año'], last_month['Mes']
         if last_month == 1:
             previous_month = 12
@@ -44,7 +44,7 @@ if archivo is not None:
             previous_year = last_year
 
         df_filtered = df[(df['Año'] < last_year) | ((df['Año'] == last_year) & (df['Mes'] < last_month))]
-        # Aggregate the data until the last available month
+
         df_grouped_filtered = df_filtered.groupby('Producto').agg(
             Precio_promedio=('Ingreso_total', lambda x: x.sum() / df_filtered.loc[x.index, 'Unidades_vendidas'].sum()),
             Margen_promedio=('Ingreso_total', lambda x: (x.sum() - df_filtered.loc[x.index, 'Costo_total'].sum()) / x.sum()),
@@ -57,11 +57,8 @@ if archivo is not None:
         st.subheader("Evolución de las ventas por Mes")
         
         df_last_month = df[(df['Año'] == last_year) & (df['Mes'] == last_month)]
-        # Filter the data for the previous month
         df_previous_month = df[(df['Año'] == previous_year) & (df['Mes'] == previous_month)]
-        # Get the sold units for each product in the last month
         units_last_month = df_last_month[['Producto', 'Unidades_vendidas']]
-        # Get the sold units for each product in the previous month
         units_previous_month = df_previous_month[['Producto', 'Unidades_vendidas']]
 
         for producto in productos:
@@ -124,9 +121,11 @@ if archivo is not None:
                     ax1.set_xlabel('Período (Año-Mes)')
                     ax1.set_ylabel('Unidades Vendidas')
 
-                    # ax1.set_ylim([0, 10000])
+                      
                     ax1.legend()
-                    plt.xticks(rotation=90)
+                    tick_positions = range(0, len(data), 12) 
+                    tick_labels = data["Año"].iloc[tick_positions]  
+                    plt.xticks(tick_positions, tick_labels)
                     st.pyplot(plt)
             
     def mostrar_informacion_alumno():
