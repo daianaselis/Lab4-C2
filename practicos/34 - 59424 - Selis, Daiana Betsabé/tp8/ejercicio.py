@@ -65,18 +65,18 @@ if archivo is not None:
                     df_filtered['Margen'] = (df_filtered['Ganancia'] / df_filtered['Ingreso_total']) * 100
                     margen_promedio = df_filtered['Margen'].mean()
 
-                    margen_promedio_anual = df_filtered.groupby('Año')['Margen'].mean()
-                    variacion_margen_promedio_anual = margen_promedio_anual.pct_change().mean() * 100
+                    margen_anual = df_filtered.groupby('Año')['Margen'].mean()
+                    var_margen = margen_anual.pct_change().mean() * 100
 
                     unidades_promedio = df_filtered['Unidades_vendidas'].mean()
                     unidades_vendidas = df_filtered['Unidades_vendidas'].sum()
 
-                    unidades_por_año = df_filtered.groupby('Año')['Unidades_vendidas'].sum()
-                    variacion_anual_unidades = unidades_por_año.pct_change().mean() * 100
+                    unidades_x_anio = df_filtered.groupby('Año')['Unidades_vendidas'].sum()
+                    var_unidades = unidades_x_anio.pct_change().mean() * 100
 
                     st.metric("Precio Promedio", f"${precio_promedio:,.0f}".replace(",","."), f"{variacion_precio_promedio_anual:.2f}%")
-                    st.metric("Margen Promedio", f"{margen_promedio:,.0f}%".replace(",","."), f"{variacion_margen_promedio_anual:.2f}%")
-                    st.metric("Unidades Vendidas", f"{unidades_vendidas:,.0f}".replace(",","."), f"{variacion_anual_unidades:.2f}%")
+                    st.metric("Margen Promedio", f"{margen_promedio:,.0f}%".replace(",","."), f"{var_margen:.2f}%")
+                    st.metric("Unidades Vendidas", f"{unidades_vendidas:,.0f}".replace(",","."), f"{var_unidades:.2f}%")
                 with col2:           
                     fig, (ax1) = plt.subplots(1, 1, figsize=(10, 6))
 
